@@ -1,12 +1,20 @@
-import express from 'express'
-const app = express()
-import url from 'url'
-import path from 'path'
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
-   
+import express from "express";
+import url from "url";
+import path from "path";
+import pool from "./db.js";
+
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const app = express();
+const port = process.env.PORT || 3000;
+
+
 // TODO add middleware and route handlers here
-app.use(express.static('public'))
+
+
+app.use(express.static("public"));
 app.use(express.json());
 
-
-app.listen(3000)
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
