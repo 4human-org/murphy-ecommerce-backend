@@ -14,13 +14,46 @@ app.use(express.json());
 
 // TODO add more middleware and route handlers here
 
-app.get('/item', async (req, res) => {
+// GET all items
+app.get('/items', async (req, res) => {
   try {
     const item = await prisma.item.findMany();
     res.json(item);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'An error occurred while fetching items' });
+  }
+});
+
+
+// CREATE new item
+app.post('/items', async (req, res) => {
+
+  try {
+    const newItem = await prisma.item.create({
+      // extract data from req body to create a new item
+      data: { ...req.body }
+    });
+    res.status(200).json(newItem);
+  } catch(error) {
+    console.log(error);
+    res.status(400).json({ error: "An error occured while creating a new item" });
+  }
+});
+
+// DELETE an item
+app.delete('/items/:id', async (req, res) => {
+  try {
+    await prisma.item.delete({
+      where: {
+        id: req.params.id
+      }
+    });
+    res.status(200).json({ error: "Item deleted successfully" });
+
+  } catch(error) {
+    console.log(error);
+    res.status(400).json({ error: "Item could not be deleted" });
   }
 });
 
