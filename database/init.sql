@@ -1,11 +1,11 @@
 
-/* Initializing database   */
-Create Database murphy_ecommerce;   
+-- Initializing database
+CREATE DATABASE murphy_ecommerce;   
 
-/* allows for UUID Creation */
+-- allows for UUID Creation
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-/* connects to database */
+-- connects to database
 \c murphy_ecommerce; 
 
 
@@ -34,31 +34,29 @@ CREATE TABLE IF NOT EXISTS item (
 
 
 
-/* THIS SCRIPT IS TESTED UP TO THIS POINT */
+-- THIS SCRIPT IS TESTED UP TO THIS POINT
 
 
--- creates an Impact table that tells how a product will influence a community
+-- creates "item_impact" table that tells how a product will influence a community
 CREATE TABLE [IF NOT EXISTS] item_impact (  
-    /*UUID*/
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY 
     name VARCHAR (50),
     impact_image TEXT, 
     description TEXT
-    /* Needs reference to item_id */
+    -- Needs reference to item_id
 );
+
 -- creates a specific Purchase ID 
 CREATE TABLE IF NOT EXISTS purchase ( 
-    /*UUID*/
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY, 
     /*References item*/
-    item_id UUID REFERENCES items(id),
+    item_id UUID REFERENCES item(id),
     /*References Order*/
     order_id UUID REFERENCES order(id), 
     quantity int,
 ); 
 
 CREATE TABLE IF NOT EXISTS order ( 
-    /*UUID*/
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY, 
     /*references users */
     user_id UUID REFERENCES user(id)
@@ -70,7 +68,6 @@ CREATE TABLE IF NOT EXISTS order (
 ); 
 
 CREATE TABLE IF NOT EXISTS user( 
-    /*UUID*/
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL, 

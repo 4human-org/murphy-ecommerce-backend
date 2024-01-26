@@ -33,9 +33,9 @@ INSERT INTO item_impact (name, impact_image, description) VALUES
     ('Impact B', 'https://static.wikia.nocookie.net/houkai-star-rail/images/f/fe/Item_Sanctity_of_the_Trash_Can.png/revision/latest?cb=20230506200213', 'DescriptionImpact B'); 
 
  -- Insert data into 'USER' table
-INSERT INTO user (username, hashed_password, email, phone_number, is_admin) VALUES
-    ('john_doe', 'hashed_password_for_john', 'john@example.com', '1234567890', true),
-    ('jane_smith', 'hashed_password_for_jane', 'jane@example.com', '9876543210', false);
+INSERT INTO user (username, email, phone_number, is_admin) VALUES
+    ('john_doe', 'john@example.com', '1234567890', TRUE),
+    ('jane_smith', 'jane@example.com', '9876543210', FALSE);
 
 
 -- all inserts below these require a reference(forgeign key) 
