@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS item (
     price FLOAT,
     stock INT,
     sourcing TEXT,
-    item_image_urls TEXT[],
+    item_image_urls TEXT,
     expiration_date TIMESTAMP 
 );
 
