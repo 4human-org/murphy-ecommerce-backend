@@ -83,6 +83,45 @@ app.delete('/items/:id', async (req, res) => {
     res.status(400).json({ error: "Item could not be deleted" });
   }
 });
+// PATCH API endpoint for updating a single item in the Database
+// based on given fields that need an update
+app.patch('/items/', async(req, res) => {
+  try {
+    // Extract updated fields from the request body
+    const updatedFields = req.body;
+    const itemId = updatedFields.id;
+    // Check if the unique identifier (item ID) is provided
+    if (!itemId) {
+      return res.status(400).json({ error: 'Item ID is required for update' });
+    }
+    // Retrieve the existing item from the database using the provided item ID
+    const existingItem = await prisma.item.findUnique({
+      where: {
+        id: itemId,
+      },
+    });
+    // Check if the item with the provided ID exists
+    if (!existingItem) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+    // Update only the specified fields by merging existing and updated fields
+    const updatedItem = await prisma.item.update({
+      where: {
+        id: itemId,
+      },
+      data: {
+        ...existingItem, // include existing fields
+        ...updatedFields, // update with new fields
+      },
+    });
+    // Send the updated item as a JSON response
+    res.status(200).json(updatedItem);
+  } catch(error) {
+    // Handle errors and log them
+    console.log(error);
+    res.status(500).json({ error: 'An error occurred while updating the item' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
