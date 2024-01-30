@@ -85,7 +85,7 @@ app.delete('/items/:id', async (req, res) => {
 });
 // PATCH API endpoint for updating a single item in the Database
 // based on given fields that need an update
-app.patch('/items/', async(req, res) => {
+app.patch('/items', async(req, res) => {
   try {
     // Extract updated fields from the request body
     const updatedFields = req.body;
