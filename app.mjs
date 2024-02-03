@@ -128,3 +128,21 @@ app.listen(port, () => {
 });
 
 
+// GET API endpoint for only ITEM-NAMES 
+
+app.get('/items-name', async (req, res) => {
+  try {
+    // Retrieving all items from database
+    let items = await prisma.item.findMany({
+      // Selects only the Name Column of the database to send 
+      select:{ 
+        name:true
+      }
+    });
+
+    res.json(items);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'An error occurred while fetching items names'});
+  }
+});
