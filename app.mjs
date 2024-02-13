@@ -22,13 +22,41 @@ TODO: We need to filter by query params
 */
 app.get('/items', async (req, res) => {
   try {
-    // Retrieving all items from database
-    let items = await prisma.item.findMany();
+    // Extract query parameters
+    const { name, category, is_recommended, price } = req.query;
 
+    // Build a dynamic query object
+    let query = {};
+
+    if (name) {
+      query.name = {
+        contains: name,
+      };
+    }
+
+    if (category) {
+      query.category = category;
+    }
+
+    if (is_recommended !== undefined) {
+      query.is_recommended = is_recommended === 'true';
+    }
+
+    if (price) {
+      query.price = {
+        lte: parseFloat(price),
+      };
+    }
+
+    const items = await prisma.item.findMany({
+      where: query,
+    });
+
+    res.json(items);
     res.json(items);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'An error occurred while fetching items'});
+    res.status(500).json({ error: 'An error occurred while fetching items' });
   }
 });
 
