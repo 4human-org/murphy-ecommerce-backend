@@ -53,7 +53,6 @@ app.get('/items', async (req, res) => {
     });
 
     res.json(items);
-    res.json(items);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'An error occurred while fetching items' });
