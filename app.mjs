@@ -1,6 +1,5 @@
 // app.mjs
 import express from "express";
-import { FieldValue } from "firebase-admin/firestore";
 import { db } from "./firebase.mjs"; // Make sure to update the file extension here as well
 
 const app = express();
@@ -9,7 +8,7 @@ const port = 3000;
 app.use(express.json());
 
 app.get("/items", async (req, res) => {
-  const itemsRef = db.collection("Items");
+  const itemsRef = db.collection("items");
   const snapshot = await itemsRef.get();
 
   if (snapshot.empty) {
