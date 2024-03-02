@@ -26,3 +26,14 @@ app.get("/items", async (req, res) => {
 app.listen(port, () => console.log(`Server has started on port: ${port}`));
 
 
+// Aiming to grab only the names of all the items  not done yet// 
+app.get("/items-names", async (req, res) => { 
+
+  const collectionRef = db.collection("items");
+  const snapshot = await itemsRef.get();
+  const names  
+
+
+
+
+});
