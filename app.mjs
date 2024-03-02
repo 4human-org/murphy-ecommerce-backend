@@ -26,13 +26,27 @@ app.get("/items", async (req, res) => {
 app.listen(port, () => console.log(`Server has started on port: ${port}`));
 
 
-// Aiming to grab only the names of all the items  not done yet// 
-app.get("/items-names", async (req, res) => { 
+// Aiming to grab only the names of all the items and puts it into a "names" array  (note untested as of now)// 
+app.get("/items/names", async (req, res) => { 
 
   const collectionRef = db.collection("items");
   const snapshot = await itemsRef.get();
-  const names  
+  const names =[]; 
+ 
+  try{
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      names.push(data.name)
+    });
+  
+    res.status(200).json(items);
 
+  } 
+
+  catch (error){ 
+    console.error('Error getting documents', error);
+    res.status(500).send('Error retrieving documents');
+  }
 
 
 
