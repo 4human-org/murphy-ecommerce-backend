@@ -23,6 +23,27 @@ app.get("/items", async (req, res) => {
   res.status(200).json(items);
 });
 
+app.get('/item/:id', async (req, res) => {
+  try {
+    const itemId = req.params.id;
+
+    // Retrieve the item from Firestore using the provided item ID
+    const itemRef = await db.collection('items').doc(itemId).get();
+    
+    // Returns 404 Error if Item is not found
+    if (!itemRef.exists) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+
+    // Extract the data from the document snapshot
+    const item = itemRef.data();
+    res.json(item);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'An error occurred while fetching item' });
+  }
+});
+
 app.post('/items', async (req, res) => {
   try {
     const newItemRef = await db.collection('items').add(req.body);
@@ -35,6 +56,20 @@ app.post('/items', async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "An error occurred while creating a new item" });
+  }
+});
+
+app.delete('/items/:id', async (req, res) => {
+  try {
+    const itemId = req.params.id;
+
+    // Delete the item from Firestore using the provided item ID
+    await db.collection('items').doc(itemId).delete();
+    
+    res.status(200).json({ message: "Item deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: "Item could not be deleted" });
   }
 });
 
