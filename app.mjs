@@ -1,11 +1,13 @@
 // app.mjs
 import express from "express";
+import bodyParser from "body-parser";
 import { db } from "./firebase.mjs"; // Make sure to update the file extension here as well
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(bodyParser.json());
 
 app.get("/items", async (req, res) => {
   const itemsRef = db.collection("items");
@@ -73,17 +75,12 @@ app.delete('/items/:id', async (req, res) => {
   }
 });
 
-app.patch('/items', async(req, res) => {
+app.patch('/items/:id', async (req, res) => {
   try {
-    // Extract updated fields from the request body
-    const updatedFields = req.body;
-    const itemId = updatedFields.id;
-    // Check if the unique identifier (item ID) is provided
-    if (!itemId) {
-      return res.status(400).json({ error: 'Item ID is required for update' });
-    }
+    const itemId = req.params.id;
+    console.log(itemId)
 
-    // Retrieve the existing item from the database using the provided item ID
+    // Retrieve the item from Firestore using the provided item ID
     const itemRef = db.collection('items').doc(itemId);
     const itemSnapshot = await itemRef.get();
 
@@ -91,19 +88,45 @@ app.patch('/items', async(req, res) => {
       return res.status(404).json({ error: 'Item not found' });
     }
 
-    // Merge existing and updated fields
-    const existingItem = itemSnapshot.data();
-    const updatedItem = { ...existingItem, ...updatedFields };
+    // Extract updated fields from the request body
+    const updatedFields = req.body.itemId;
+    console.log(req.body.itemId)
 
     // Update the item in the Firestore collection
-    await itemRef.update(updatedItem);
+    await itemRef.update(updatedFields);
+
+    // Fetch the updated item to include in the response
+    const updatedItemSnapshot = await itemRef.get();
+    const updatedItem = updatedItemSnapshot.data();
 
     // Send the updated item as a JSON response
     res.status(200).json(updatedItem);
-  } catch(error) {
-    // Handle errors and log them
+  } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'An error occurred while updating the item' });
+  }
+});
+
+app.get('/items-name', async (req, res) => {
+  try {
+    // Retrieving all items from the "items" collection
+    const snapshot = await db.collection('items').get();
+
+    if (snapshot.empty) {
+      return res.status(404).json({ error: 'No items found' });
+    }
+
+    // Extracting only item names from the documents
+    const items = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      items.push({ name: data.name });
+    });
+
+    res.json(items);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'An error occurred while fetching item names'});
   }
 });
 
