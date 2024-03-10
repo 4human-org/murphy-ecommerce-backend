@@ -75,10 +75,14 @@ app.delete('/items/:id', async (req, res) => {
   }
 });
 
-app.patch('/items/:id', async (req, res) => {
+app.patch('/items', async (req, res) => {
   try {
-    const itemId = req.params.id;
-    console.log(itemId)
+    console.log(req.body)
+    const itemId = req.body.id;
+    console.log("itemID: " + itemId);
+    if (!itemId) {
+      return res.status(400).json({ error: 'Item ID not provided' });
+    }
 
     // Retrieve the item from Firestore using the provided item ID
     const itemRef = db.collection('items').doc(itemId);
@@ -89,8 +93,7 @@ app.patch('/items/:id', async (req, res) => {
     }
 
     // Extract updated fields from the request body
-    const updatedFields = req.body.itemId;
-    console.log(req.body.itemId)
+    const { id, ...updatedFields } = req.body;
 
     // Update the item in the Firestore collection
     await itemRef.update(updatedFields);
@@ -106,6 +109,7 @@ app.patch('/items/:id', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while updating the item' });
   }
 });
+
 
 app.get('/items-name', async (req, res) => {
   try {
