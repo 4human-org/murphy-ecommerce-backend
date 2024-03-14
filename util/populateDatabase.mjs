@@ -18,4 +18,4 @@ async function populateDatabase() {
 
 export default populateDatabase();
 
-// Run this script with the command: node util/initDatabase.mjs
+// Run this script with the command: node util/populateDatabase.mjs
