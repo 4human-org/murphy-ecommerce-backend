@@ -1,7 +1,6 @@
 // app.mjs
 import express from "express";
 import bodyParser from "body-parser";
-
 // Import the routers
 import productsRouter from "./routes/productsRouter";
 
@@ -15,6 +14,7 @@ app.use(bodyParser.json());
 
 // Declare the routes
 app.use("/", productsRouter);
+
 
 // Start the server
 app.listen(port, () => console.log(`Server has started on port: ${port}`));

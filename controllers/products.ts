@@ -6,7 +6,6 @@ import type Product from "../models/products";
 const collectionName = "products";
 
 // Define the handlers for the CRUD operations
-
 // Get all products
 const getAllProducts = async (req: Request, res: Response) => {
   const collectionRef = db.collection(collectionName);
@@ -16,9 +15,10 @@ const getAllProducts = async (req: Request, res: Response) => {
     return res.status(404).send("No products found");
   }
 
+  // return the products as an array of JSON objects with the ID included
   const products: Product[] = [];
   snapshot.forEach((doc) => {
-    products.push(doc.data() as Product);
+    products.push({ id: doc.id, ...doc.data() } as Product);
   });
 
   res.status(200).json(products);
@@ -29,20 +29,21 @@ const getProductById = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
 
-    // Retrieve the item from Firestore using the provided item ID
+    // Retrieve the product from Firestore using the provided product ID
     const productRef = await db.collection(collectionName).doc(productId).get();
 
-    // Returns 404 Error if Item is not found
+    // Returns 404 Error if product is not found
     if (!productRef.exists) {
-      return res.status(404).json({ error: "Item not found" });
+      return res.status(404).json({ error: "Product not found" });
     }
 
-    // Extract the data from the document snapshot
-    const item = productRef.data();
-    res.json(item);
+    // Extract the data from the document snapshot and send it as a JSON response with the ID included
+    const product = productRef.data();
+
+    res.status(200).json({ id: productRef.id, ...product });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "An error occurred while fetching item" });
+    res.status(500).json({ error: "An error occurred while fetching product" });
   }
 };
 
@@ -68,7 +69,7 @@ const deleteProduct = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
 
-    // Delete the item from Firestore using the provided item ID
+    // Delete the product from Firestore using the provided product ID
     await db.collection(collectionName).doc(productId).delete();
 
     res.status(200).json({ message: "Product deleted successfully" });
@@ -88,25 +89,25 @@ const updateProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Product ID not provided" });
     }
 
-    // Retrieve the item from Firestore using the provided item ID
+    // Retrieve the product from Firestore using the provided product ID
     const productRef = db.collection(collectionName).doc(productId);
-    const itemSnapshot = await productRef.get();
+    const productSnapshot = await productRef.get();
 
-    if (!itemSnapshot.exists) {
+    if (!productSnapshot.exists) {
       return res.status(404).json({ error: "Product not found" });
     }
 
     // Extract updated fields from the request body
     const { id, ...updatedFields } = req.body;
 
-    // Update the item in the Firestore collection
+    // Update the product in the Firestore collection
     await productRef.update(updatedFields);
 
-    // Fetch the updated item to include in the response
+    // Fetch the updated product to include in the response
     const updatedProductSnapshot = await productRef.get();
     const updatedProduct = updatedProductSnapshot.data();
 
-    // Send the updated item as a JSON response
+    // Send the updated product as a JSON response
     res.status(200).json(updatedProduct);
   } catch (error) {
     console.log(error);
