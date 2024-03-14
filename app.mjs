@@ -2,7 +2,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 // Import the routers
-import productsRouter from "./routes/productsRouter";
+import productsRouter from "./routes/productsRouter.mjs";
 
 // Create a new Express application
 const app = express();

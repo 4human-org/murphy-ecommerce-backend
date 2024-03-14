@@ -1,13 +1,11 @@
-import { db } from "../firebase";
-import { Request, Response } from "express";
-import type Product from "../models/products";
+import { db } from "../firebase.mjs";
 
 // Firestore collection name
 const collectionName = "products";
 
 // Define the handlers for the CRUD operations
 // Get all products
-const getAllProducts = async (req: Request, res: Response) => {
+const getAllProducts = async (req, res) => {
   const collectionRef = db.collection(collectionName);
   const snapshot = await collectionRef.get();
 
@@ -16,16 +14,16 @@ const getAllProducts = async (req: Request, res: Response) => {
   }
 
   // return the products as an array of JSON objects with the ID included
-  const products: Product[] = [];
+  const products = [];
   snapshot.forEach((doc) => {
-    products.push({ id: doc.id, ...doc.data() } as Product);
+    products.push({ id: doc.id, ...doc.data() });
   });
 
   res.status(200).json(products);
 };
 
 // Get a product by its ID
-const getProductById = async (req: Request, res: Response) => {
+const getProductById = async (req, res) => {
   try {
     const productId = req.params.id;
 
@@ -48,7 +46,7 @@ const getProductById = async (req: Request, res: Response) => {
 };
 
 // Create a new product
-const createProduct = async (req: Request, res: Response) => {
+const createProduct = async (req, res) => {
   try {
     const newProductRef = await db.collection(collectionName).add(req.body);
     const newProductSnapshot = await newProductRef.get();
@@ -56,7 +54,9 @@ const createProduct = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Failed to create product" });
     }
     const newProduct = newProductSnapshot.data();
-    res.status(200).json(newProduct);
+
+    // Send the new product as a JSON response with the ID included
+    res.status(201).json({ id: newProductRef.id, ...newProduct });
   } catch (error) {
     console.log(error);
     res
@@ -65,7 +65,7 @@ const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-const deleteProduct = async (req: Request, res: Response) => {
+const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
 
@@ -80,7 +80,7 @@ const deleteProduct = async (req: Request, res: Response) => {
 };
 
 // Update a product
-const updateProduct = async (req: Request, res: Response) => {
+const updateProduct = async (req, res) => {
   try {
     console.log(req.body);
     const productId = req.body.id;
@@ -107,8 +107,8 @@ const updateProduct = async (req: Request, res: Response) => {
     const updatedProductSnapshot = await productRef.get();
     const updatedProduct = updatedProductSnapshot.data();
 
-    // Send the updated product as a JSON response
-    res.status(200).json(updatedProduct);
+    // Send the updated product as a JSON response with the ID included
+    res.status(200).json({ id: updatedProductSnapshot.id, ...updatedProduct });
   } catch (error) {
     console.log(error);
     res

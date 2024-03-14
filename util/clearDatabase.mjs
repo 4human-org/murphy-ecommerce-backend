@@ -15,5 +15,4 @@ await clearDatabase();
 
 
 
-
 // Run this script with the command: node util/clearDatabase.mjs
