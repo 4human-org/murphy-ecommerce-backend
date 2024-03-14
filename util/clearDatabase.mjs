@@ -1,4 +1,4 @@
-import { db } from "./firebase.mjs";
+import { db } from "../firebase.mjs";
 
 
 // This function deletes all documents in the "products" collection in the Firestore database.

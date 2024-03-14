@@ -1,4 +1,4 @@
-import { db } from "./firebase.mjs";
+import { db } from "../firebase.mjs";
 import fs from "fs";
 
 // This function populates the "products" collection in the Firestore database with sample data.

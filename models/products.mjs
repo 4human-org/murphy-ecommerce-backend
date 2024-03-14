@@ -1,5 +1,5 @@
 // Purpose: Define the Product class.
-
+// NOT IN USE
 // This can be used to create a new product object with the provided properties.
 
 class Product {
