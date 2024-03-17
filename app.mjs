@@ -2,12 +2,18 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { db } from "./firebase.mjs"; // Make sure to update the file extension here as well
+const cors = require(cors);
 
 const app = express();
-const port = 3000;
+const port = 3030;
 
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 app.get("/items", async (req, res) => {
   const itemsRef = db.collection("items");
@@ -25,16 +31,16 @@ app.get("/items", async (req, res) => {
   res.status(200).json(items);
 });
 
-app.get('/item/:id', async (req, res) => {
+app.get("/item/:id", async (req, res) => {
   try {
     const itemId = req.params.id;
 
     // Retrieve the item from Firestore using the provided item ID
-    const itemRef = await db.collection('items').doc(itemId).get();
-    
+    const itemRef = await db.collection("items").doc(itemId).get();
+
     // Returns 404 Error if Item is not found
     if (!itemRef.exists) {
-      return res.status(404).json({ error: 'Item not found' });
+      return res.status(404).json({ error: "Item not found" });
     }
 
     // Extract the data from the document snapshot
@@ -42,13 +48,13 @@ app.get('/item/:id', async (req, res) => {
     res.json(item);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'An error occurred while fetching item' });
+    res.status(500).json({ error: "An error occurred while fetching item" });
   }
 });
 
-app.post('/items', async (req, res) => {
+app.post("/items", async (req, res) => {
   try {
-    const newItemRef = await db.collection('items').add(req.body);
+    const newItemRef = await db.collection("items").add(req.body);
     const newItemSnapshot = await newItemRef.get();
     if (!newItemSnapshot.exists) {
       return res.status(404).json({ error: "Failed to create item" });
@@ -57,17 +63,19 @@ app.post('/items', async (req, res) => {
     res.status(200).json(newItem);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "An error occurred while creating a new item" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating a new item" });
   }
 });
 
-app.delete('/items/:id', async (req, res) => {
+app.delete("/items/:id", async (req, res) => {
   try {
     const itemId = req.params.id;
 
     // Delete the item from Firestore using the provided item ID
-    await db.collection('items').doc(itemId).delete();
-    
+    await db.collection("items").doc(itemId).delete();
+
     res.status(200).json({ message: "Item deleted successfully" });
   } catch (error) {
     console.log(error);
@@ -75,21 +83,21 @@ app.delete('/items/:id', async (req, res) => {
   }
 });
 
-app.patch('/items', async (req, res) => {
+app.patch("/items", async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     const itemId = req.body.id;
     console.log("itemID: " + itemId);
     if (!itemId) {
-      return res.status(400).json({ error: 'Item ID not provided' });
+      return res.status(400).json({ error: "Item ID not provided" });
     }
 
     // Retrieve the item from Firestore using the provided item ID
-    const itemRef = db.collection('items').doc(itemId);
+    const itemRef = db.collection("items").doc(itemId);
     const itemSnapshot = await itemRef.get();
 
     if (!itemSnapshot.exists) {
-      return res.status(404).json({ error: 'Item not found' });
+      return res.status(404).json({ error: "Item not found" });
     }
 
     // Extract updated fields from the request body
@@ -106,18 +114,19 @@ app.patch('/items', async (req, res) => {
     res.status(200).json(updatedItem);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'An error occurred while updating the item' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the item" });
   }
 });
 
-
-app.get('/items-name', async (req, res) => {
+app.get("/items-name", async (req, res) => {
   try {
     // Retrieving all items from the "items" collection
-    const snapshot = await db.collection('items').get();
+    const snapshot = await db.collection("items").get();
 
     if (snapshot.empty) {
-      return res.status(404).json({ error: 'No items found' });
+      return res.status(404).json({ error: "No items found" });
     }
 
     // Extracting only item names from the documents
@@ -130,7 +139,9 @@ app.get('/items-name', async (req, res) => {
     res.json(items);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: 'An error occurred while fetching item names'});
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching item names" });
   }
 });
 
