@@ -29,14 +29,14 @@
       "post": {
         "tags": ["Products"],
         "summary": "Create a new product",
-        "description": "Creates a new product.",
+        "description": "Creates a new product without needing an ID in the request body.",
         "parameters": [
           {
             "name": "product",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/NewProduct"
             }
           }
         ],
@@ -71,41 +71,50 @@
             }
           }
         }
-      }
-    },
-    "/user": {
-      "get": {
-        "tags": ["User"],
-        "summary": "Get user information",
-        "description": "Returns information about the user.",
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete a product by id",
+        "description": "Deletes a single product by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "200": {
-            "description": "User information",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
+          "204": {
+            "description": "Product successfully deleted"
           }
         }
       },
-      "post": {
-        "tags": ["User"],
-        "summary": "Create a new user",
-        "description": "Creates a new user account.",
+      "patch": {
+        "tags": ["Products"],
+        "summary": "Update a product by id",
+        "description": "Updates a single product by id without needing an ID in the request body.",
         "parameters": [
           {
-            "name": "user",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "product",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/NewProduct"
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "The newly created user account",
+          "200": {
+            "description": "Product successfully updated",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/Product"
             }
           }
         }
@@ -125,25 +134,67 @@
         "price": {
           "type": "number"
         },
+        "description": {
+          "type": "string"
+        },
+        "imagesUrl": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourcing": {
+          "type": "string"
+        },
         "stock": {
           "type": "integer"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
-    "User": {
+    "NewProduct": {
       "type": "object",
+      "required": [
+        "name",
+        "price",
+        "description",
+        "imagesUrl",
+        "sourcing",
+        "stock",
+        "categories"
+      ],
       "properties": {
-        "id": {
+        "name": {
           "type": "string"
         },
-        "username": {
+        "price": {
+          "type": "number"
+        },
+        "description": {
           "type": "string"
         },
-        "email": {
+        "imagesUrl": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourcing": {
           "type": "string"
         },
-        "password": {
-          "type": "string"
+        "stock": {
+          "type": "integer"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }
