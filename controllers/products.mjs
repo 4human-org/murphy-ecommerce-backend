@@ -82,9 +82,7 @@ const deleteProduct = async (req, res) => {
 // Update a product
 const updateProduct = async (req, res) => {
   try {
-    console.log(req.body);
-    const productId = req.body.id;
-    console.log("product ID: " + productId);
+    const productId = req.params.id;
     if (!productId) {
       return res.status(400).json({ error: "Product ID not provided" });
     }
