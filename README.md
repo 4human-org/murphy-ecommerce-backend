@@ -55,3 +55,6 @@ Start the server with the following command:
 nodemon app.mjs
 ```
 
+## API Documentation
+
+For a quick view of the API's structure and endpoints, run the API and visit "/api-docs" endpoint. This will pull up the Swagger UI.

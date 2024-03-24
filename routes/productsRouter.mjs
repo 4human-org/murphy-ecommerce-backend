@@ -18,7 +18,7 @@ router.post("/products", createProduct);
 
 router.delete("/products/:id", deleteProduct);
 
-router.patch("/products", updateProduct);
+router.patch("/products/:id", updateProduct);
 
 // Export the router
 export default router;

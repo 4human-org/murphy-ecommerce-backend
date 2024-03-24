@@ -1,0 +1,202 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Murphy Ecommerce API",
+    "description": "This API handles all business logic for the ecommerce website.",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3030",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get all products",
+        "description": "Returns a list of all products.",
+        "responses": {
+          "200": {
+            "description": "A list of products",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Create a new product",
+        "description": "Creates a new product without needing an ID in the request body.",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewProduct"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The newly created product",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get a product by id",
+        "description": "Returns a single product by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A single product",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete a product by id",
+        "description": "Deletes a single product by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Product successfully deleted"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Products"],
+        "summary": "Update a product by id",
+        "description": "Updates a single product by id without needing an ID in the request body.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "product",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewProduct"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product successfully updated",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imagesUrl": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourcing": {
+          "type": "string"
+        },
+        "stock": {
+          "type": "integer"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "NewProduct": {
+      "type": "object",
+      "required": [
+        "name",
+        "price",
+        "description",
+        "imagesUrl",
+        "sourcing",
+        "stock",
+        "categories"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imagesUrl": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourcing": {
+          "type": "string"
+        },
+        "stock": {
+          "type": "integer"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
