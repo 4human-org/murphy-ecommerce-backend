@@ -117,6 +117,39 @@ const updateProduct = async (req, res) => {
   }
 };
 
+
+const getProductsFromCart = async (req, res) => {
+  try {
+    const cartProducts = req.body; // Assuming the body is an array of { productId, quantity }
+    const products = [];
+    console.log(cartProducts)
+    
+    for (const item of cartProducts) {
+      const productRef = db.collection('products').doc(item.productId);
+      const productSnapshot = await productRef.get();
+
+      if (productSnapshot.exists) {
+        const productData = productSnapshot.data();
+        products.push({ ...productData,
+          quantity: item.quantity,
+          ProductId: productSnapshot.id,
+        });
+      } else {
+        // Handle the case where a product is not found
+        console.log(`Product with ID ${item.productId} not found`);
+      }
+    }
+
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+
+
 // Export the handlers
 export {
   getAllProducts,
@@ -124,4 +157,5 @@ export {
   createProduct,
   deleteProduct,
   updateProduct,
+  getProductsFromCart,
 };

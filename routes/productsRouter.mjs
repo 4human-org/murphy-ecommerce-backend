@@ -5,6 +5,7 @@ import {
   deleteProduct,
   createProduct,
   updateProduct,
+  getProductsFromCart
 } from "../controllers/products.mjs";
 
 const router = express.Router();
@@ -19,6 +20,9 @@ router.post("/products", createProduct);
 router.delete("/products/:id", deleteProduct);
 
 router.patch("/products", updateProduct);
+
+router.post('/products/cart', getProductsFromCart);
+
 
 // Export the router
 export default router;
