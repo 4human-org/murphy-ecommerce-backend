@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 // Import the routers
 import productsRouter from "./routes/productsRouter.mjs";
+import ordersRouter from "./routes/ordersRouter.mjs"
 
 // Create a new Express application
 const app = express();
@@ -20,6 +21,7 @@ app.use(
 
 // Declare the routes
 app.use("/", productsRouter);
+app.use("/", ordersRouter);
 
 // Start the server
 app.listen(port, () => console.log(`Server has started on port: ${port}`));
