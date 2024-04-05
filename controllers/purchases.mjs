@@ -72,7 +72,7 @@ const deletePurchase = async (req, res) => {
 			return res.status(400).json({ error: "purchase ID not provided" });
 		}
 
-		// Retrieve the order from Firestore using the provided order ID
+		// Retrieve the purchase from Firestore using the provided purchase ID
 		const purchaseRef = db.collection(collectionName).doc(purchaseId);
 		const purchaseSnapshot = await purchaseRef.get();
 
@@ -83,14 +83,14 @@ const deletePurchase = async (req, res) => {
 		// Extract updated fields from the request body
 		const { id, ...updatedFields } = req.body;
 
-		// Update the order in the Firestore collection
+		// Update the purchase in the Firestore collection
 		await purchaseRef.update(updatedFields);
 
-		// Fetch the updated order to include in the response
+		// Fetch the updated purchase to include in the response
 		const updatedPurchaseSnapshot = await purchaseRef.get();
 		const updatedPurchase = updatedPurchaseSnapshot.data();
 
-		// Send the updated order as a JSON response with the ID included
+		// Send the updated purchase as a JSON response with the ID included
 		res.status(200).json({ id: updatedPurchaseSnapshot.id, ...updatedPurchase });
 		
 	} catch (error) {
