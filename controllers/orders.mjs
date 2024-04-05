@@ -89,7 +89,7 @@ const updateOrder = async (req, res) => {
 			return res.status(400).json({ error: "Order ID not provided" });
 		}
 
-		// Retrieve the order from Firestore using the provided product ID
+		// Retrieve the order from Firestore using the provided order ID
 		const orderRef = db.collection(collectionName).doc(orderId);
 		const orderSnapshot = await orderRef.get();
 

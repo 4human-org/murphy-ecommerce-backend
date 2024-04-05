@@ -5,6 +5,7 @@ import cors from "cors";
 // Import the routers
 import productsRouter from "./routes/productsRouter.mjs";
 import ordersRouter from "./routes/ordersRouter.mjs"
+import purchasesRouter from "./routes/purchasesRouter.mjs"
 
 // Create a new Express application
 const app = express();
@@ -22,6 +23,7 @@ app.use(
 // Declare the routes
 app.use("/", productsRouter);
 app.use("/", ordersRouter);
+app.use("/", purchasesRouter);
 
 // Start the server
 app.listen(port, () => console.log(`Server has started on port: ${port}`));
