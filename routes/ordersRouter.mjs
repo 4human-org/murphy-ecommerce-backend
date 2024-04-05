@@ -18,7 +18,7 @@ router.post("/orders", createOrder);
 
 router.delete("/orders/:id", deleteOrder);
 
-router.patch("/orders", updateOrder);
+router.patch("/orders/:id", updateOrder);
 
 // Export the router
 export default router;

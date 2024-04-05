@@ -82,17 +82,19 @@ const deleteOrder = async (req, res) => {
   // Update a single order
 const updateOrder = async (req, res) => {
 	try {
-    const orderId = req.body.id;
-    if (!orderId) {
-      return res.status(400).json({ error: "Order ID not provided" });
-    }
-  
-    // Retrieve the order from Firestore using the provided product ID
-    const orderRef = db.collection(collectionName).doc(orderId);
-    const orderSnapshot = await orderRef.get();
-  
-    if (!orderSnapshot.exists) {
-      return res.status(404).json({ error: "Order not found" });
+		
+		const orderId = req.params.id;
+			
+		if (!orderId) {
+			return res.status(400).json({ error: "Order ID not provided" });
+		}
+
+		// Retrieve the order from Firestore using the provided product ID
+		const orderRef = db.collection(collectionName).doc(orderId);
+		const orderSnapshot = await orderRef.get();
+
+		if (!orderSnapshot.exists) {
+			return res.status(404).json({ error: "Order not found" });
 		}
 
 		// Extract updated fields from the request body
@@ -107,6 +109,7 @@ const updateOrder = async (req, res) => {
 
 		// Send the updated order as a JSON response with the ID included
 		res.status(200).json({ id: updatedOrderSnapshot.id, ...updatedOrder });
+		
 	} catch (error) {
 		console.log(error);
 		res
