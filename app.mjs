@@ -4,9 +4,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 // Import the routers
 import productsRouter from "./routes/productsRouter.mjs";
-import ordersRouter from "./routes/ordersRouter.mjs"
-import purchasesRouter from "./routes/purchasesRouter.mjs"
-import usersRouter from "./routes/usersRouter.mjs"
+import ordersRouter from "./routes/ordersRouter.mjs";
+import purchasesRouter from "./routes/purchasesRouter.mjs";
+import usersRouter from "./routes/usersRouter.mjs";
 // Create a new Express application
 const app = express();
 const port = 3030;

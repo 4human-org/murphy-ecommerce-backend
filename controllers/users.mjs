@@ -82,10 +82,9 @@ const deleteUser = async (req, res) => {
 // Update a user
 const updateUser = async (req, res) => {
   try {
+    const userId = req.params.id;
 
-    const UserId = req.params.id;
-    
-    if (!UserId) {
+    if (!userId) {
       return res.status(400).json({ error: "User ID not provided" });
     }
 
@@ -118,10 +117,4 @@ const updateUser = async (req, res) => {
 };
 
 // Export the handlers
-export {
-  getAllUsers,
-  getUserById,
-  createUser,
-  deleteUser,
-  updateUser,
-};
+export { getAllUsers, getUserById, createUser, deleteUser, updateUser };
