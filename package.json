@@ -6,16 +6,34 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.mjs",
-    "dev": "nodemon app.mjs"
+    "dev": "nodemon app.mjs",
+    "client-dev": "vite",
+    "client-build": "vite build",
+    "client-preview": "vite preview",
+    "server-dev": "nodemon server/server.js",
+    "start-all": "concurrently \"npm run client-dev\" \"npm run server-dev\"",
+    "prod": "npm run client-build && node server/server.js",
+    "format": "npx prettier --write **/*.{js,jsx,md}",
+    "format:check": "npx prettier --check **/*.{js,jsx,md}"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.1.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
-    "express": "^4.18.2",
-    "firebase": "^10.6.0",
+    "express": "^4.19.2",
+    "firebase": "^10.12.2",
     "firebase-admin": "^12.0.0",
-    "nodemon": "^3.0.3"
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.3",
+    "punycode": "^2.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.4",
+    "concurrently": "^8.2.1",
+    "vite": "^4.4.9"
   }
 }

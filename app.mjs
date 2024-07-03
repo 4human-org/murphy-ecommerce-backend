@@ -1,12 +1,14 @@
-// app.mjs
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import dotenv from "dotenv";
 // Import the routers
 import productsRouter from "./routes/productsRouter.mjs";
 import ordersRouter from "./routes/ordersRouter.mjs";
 import purchasesRouter from "./routes/purchasesRouter.mjs";
 import usersRouter from "./routes/usersRouter.mjs";
+import paypalRouter from "./routes/paypalRouter.mjs"; // Import PayPal router
+dotenv.config();
 // Create a new Express application
 const app = express();
 const port = 3030;
@@ -25,6 +27,7 @@ app.use("/", productsRouter);
 app.use("/", ordersRouter);
 app.use("/", purchasesRouter);
 app.use("/", usersRouter);
+app.use("/", paypalRouter); // Use PayPal router
 
 // Start the server
 app.listen(port, () => console.log(`Server has started on port: ${port}`));
