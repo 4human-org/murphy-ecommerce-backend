@@ -6,8 +6,11 @@ import {
   createOrder,
   updateOrder,
 } from "../controllers/orders.mjs";
+import { checkAuth } from '../middleware/userAuth.js'; 
 
 const router = express.Router();
+
+router.use(checkAuth);
 
 // Define Route for fetching all items
 router.get("/orders", getAllOrders);

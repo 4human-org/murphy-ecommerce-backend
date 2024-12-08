@@ -1,24 +1,28 @@
-import express from "express";
+import express from 'express';
 import {
-    getAllUsers,
-    getUserById,
-    createUser,
-    deleteUser,
-    updateUser,
-} from "../controllers/users.mjs";
+  getAllUsers,
+  getUserById,
+  createUser,
+  deleteUser,
+  updateUser,
+} from '../controllers/users.mjs';
+import { checkAuth, checkAdmin } from '../middleware/userAuth.js'; 
 
 const router = express.Router();
 
-// Define Route for fetching all items
-router.get("/users", getAllUsers);
+// Apply checkAuth middleware to all routes
+router.use(checkAuth);
 
-router.get("/users/:id", getUserById);
+// Define routes for fetching necessary user informaiton
+router.get('/users', getAllUsers);
 
-router.post("/users", createUser);
+router.get('/users/:id', getUserById);
 
-router.delete("/users/:id", deleteUser);
+router.post('/users', createUser);
 
-router.patch("/users/:id", updateUser);
+// Apply checkAdmin middleware to delete and update routes
+router.delete('/users/:id', checkAdmin, deleteUser);
 
-// Export the router
+router.patch('/users/:id', checkAdmin, updateUser);
+
 export default router;
